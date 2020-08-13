@@ -4,6 +4,7 @@ import { graphql } from 'gatsby';
 import MDXRenderer from 'gatsby-plugin-mdx/mdx-renderer';
 
 import { Layout, Link } from '$components';
+import LayoutMainPage from '../components/layoutMainPage';
 import NextPrevious from '../components/NextPrevious';
 import config from '../../config';
 import { Edit, StyledHeading, StyledMainWrapper } from '../components/styles/Docs';
@@ -12,6 +13,8 @@ const forcedNavOrder = config.sidebar.forcedNavOrder;
 
 export default class MDXRuntimeTest extends Component {
   render() {
+    console.log('In docs.js this.props.pageContext.layout: ' + this.props.pageContext.layout);
+
     const { data } = this.props;
 
     if (!data) {
@@ -27,10 +30,17 @@ export default class MDXRuntimeTest extends Component {
 
     const gitHub = require('../components/images/github.svg');
 
+    console.log('location slug: ' + this.props.location.pathname);
+
+    let compareCaseInsensitive = (a, b) => {
+      let result = a.toLowerCase().localeCompare(b.toLowerCase());
+      return result;
+    };
+
     const navItems = allMdx.edges
       .map(({ node }) => node.fields.slug)
-      .filter(slug => slug !== '/')
-      .sort()
+      .filter(slug => slug !== '/') // Include a way to get back to the landing page
+      .sort(compareCaseInsensitive)
       .reduce(
         (acc, cur) => {
           if (forcedNavOrder.find(url => url === cur)) {
@@ -76,38 +86,51 @@ export default class MDXRuntimeTest extends Component {
       config.gatsby.pathPrefix !== '/' ? canonicalUrl + config.gatsby.pathPrefix : canonicalUrl;
     canonicalUrl = canonicalUrl + mdx.fields.slug;
 
-    return (
-      <Layout {...this.props}>
-        <Helmet>
-          {metaTitle ? <title>{metaTitle}</title> : null}
-          {metaTitle ? <meta name="title" content={metaTitle} /> : null}
-          {metaDescription ? <meta name="description" content={metaDescription} /> : null}
-          {metaTitle ? <meta property="og:title" content={metaTitle} /> : null}
-          {metaDescription ? <meta property="og:description" content={metaDescription} /> : null}
-          {metaTitle ? <meta property="twitter:title" content={metaTitle} /> : null}
-          {metaDescription ? (
-            <meta property="twitter:description" content={metaDescription} />
-          ) : null}
-          <link rel="canonical" href={canonicalUrl} />
-        </Helmet>
-        <div className={'titleWrapper'}>
-          <StyledHeading>{mdx.fields.title}</StyledHeading>
-          <Edit className={'mobileView'}>
-            {docsLocation && (
-              <Link className={'gitBtn'} to={`${docsLocation}/${mdx.parent.relativePath}`}>
-                <img src={gitHub} alt={'Github logo'} /> Edit on GitHub
-              </Link>
-            )}
-          </Edit>
-        </div>
-        <StyledMainWrapper>
-          <MDXRenderer>{mdx.body}</MDXRenderer>
-        </StyledMainWrapper>
-        <div className={'addPaddTopBottom'}>
-          <NextPrevious mdx={mdx} nav={nav} />
-        </div>
-      </Layout>
-    );
+    switch (this.props.pageContext.layout) {
+      default:
+      case 'normal':
+        return (
+          <Layout {...this.props}>
+            <Helmet>
+              {metaTitle ? <title>{metaTitle}</title> : null}
+              {metaTitle ? <meta name="title" content={metaTitle} /> : null}
+              {metaDescription ? <meta name="description" content={metaDescription} /> : null}
+              {metaTitle ? <meta property="og:title" content={metaTitle} /> : null}
+              {metaDescription ? (
+                <meta property="og:description" content={metaDescription} />
+              ) : null}
+              {metaTitle ? <meta property="twitter:title" content={metaTitle} /> : null}
+              {metaDescription ? (
+                <meta property="twitter:description" content={metaDescription} />
+              ) : null}
+              <link rel="canonical" href={canonicalUrl} />
+            </Helmet>
+            <div className={'titleWrapper'}>
+              <StyledHeading>{mdx.fields.title}</StyledHeading>
+              <Edit className={'mobileView'}>
+                {docsLocation && (
+                  <Link className={'gitBtn'} to={`${docsLocation}/${mdx.parent.relativePath}`}>
+                    <img src={gitHub} alt={'Github logo'} /> Edit on GitHub
+                  </Link>
+                )}
+              </Edit>
+            </div>
+            <StyledMainWrapper>
+              <MDXRenderer>{mdx.body}</MDXRenderer>
+            </StyledMainWrapper>
+            <div className={'addPaddTopBottom'}>
+              <NextPrevious mdx={mdx} nav={nav} />
+            </div>
+          </Layout>
+        );
+      case 'root':
+        return (
+          <LayoutMainPage {...this.props}>
+            <h1 style={{ color: 'blue' }}>hi</h1>
+            <a href="codeblock">Link to Lesson 01</a>
+          </LayoutMainPage>
+        );
+    }
   }
 }
 

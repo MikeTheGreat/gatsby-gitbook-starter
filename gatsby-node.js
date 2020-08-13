@@ -9,6 +9,57 @@ const config = require('./config');
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions;
 
+  // the following will query for all the md/mdx files and then sort them by abs. path
+  // graphql(
+  //   `
+  //     {
+  //       allMdx {
+  //         edges {
+  //           node {
+  //             slug
+  //             parent {
+  //               ... on File {
+  //                 name
+  //                 dir
+  //                 absolutePath
+  //                 relativePath
+  //                 relativeDirectory
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
+  //     }
+  //   `
+  // ).then(result => {
+  //   if (result.errors) {
+  //     console.log(result.errors); // eslint-disable-line no-console
+  //     reject(result.errors);
+  //   }
+
+  //   result.data.allMdx.edges.sort(function(a, b) {
+  //     let result = a.node.parent.absolutePath
+  //       .toLowerCase()
+  //       .localeCompare(b.node.parent.absolutePath.toLowerCase());
+
+  //     // console.log(
+  //     //   'Sorting - RESULT: ' +
+  //     //     result +
+  //     //     '\n\t' +
+  //     //     a.node.parent.absolutePath +
+  //     //     '\n\t' +
+  //     //     b.node.parent.absolutePath
+  //     // );
+
+  //     return result;
+  //   });
+  //   // Create blog posts pages.
+  //   console.log('Printing out nodes:\n');
+  //   result.data.allMdx.edges.forEach(({ node }) => {
+  //     console.log(node.parent.absolutePath);
+  //   });
+  // });
+
   return new Promise((resolve, reject) => {
     resolve(
       graphql(
@@ -17,12 +68,19 @@ exports.createPages = ({ graphql, actions }) => {
             allMdx {
               edges {
                 node {
-                  fields {
-                    id
-                  }
                   tableOfContents
                   fields {
+                    id
                     slug
+                  }
+                  parent {
+                    ... on File {
+                      name
+                      dir
+                      absolutePath
+                      relativePath
+                      relativeDirectory
+                    }
                   }
                 }
               }
@@ -37,11 +95,26 @@ exports.createPages = ({ graphql, actions }) => {
 
         // Create blog posts pages.
         result.data.allMdx.edges.forEach(({ node }) => {
+          let theSlug = node.fields.slug ? node.fields.slug : '/';
+          let fpTemplate = './src/templates/docs.js';
+          let layout = 'normal';
+          if (theSlug === '/') {
+            layout = 'root';
+
+            const parent = node.parent;
+            console.log('Using alternate main page');
+            console.log(node);
+            console.log('Abs path: ' + parent.absolutePath);
+          }
+          console.log('theSlug: ' + theSlug + '     fpTemplate: ' + fpTemplate);
+          console.log('path.resolve(fpTemplate): ' + path.resolve(fpTemplate));
+
           createPage({
-            path: node.fields.slug ? node.fields.slug : '/',
-            component: path.resolve('./src/templates/docs.js'),
+            path: theSlug,
+            component: path.resolve(fpTemplate),
             context: {
               id: node.fields.id,
+              layout,
             },
           });
         });
@@ -49,6 +122,12 @@ exports.createPages = ({ graphql, actions }) => {
     );
   });
 };
+
+// from https://www.gatsbyjs.com/docs/creating-and-modifying-pages/
+// exports.onCreatePage = ({ page, actions }) => {
+//   console.log('onCreatePage: ' + page.path);
+//   console.log(page);
+// };
 
 exports.onCreateWebpackConfig = ({ actions }) => {
   actions.setWebpackConfig({
