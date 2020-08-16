@@ -5,29 +5,16 @@ const config = {
     gaTrackingId: null,
     trailingSlash: false,
   },
+
   header: {
-    logo: 'https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/brand.svg',
-    logoLink: 'https://hasura.io/learn/',
-    title:
-      "<a href='https://hasura.io/learn/'><img class='img-responsive' src='https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/learn-logo.svg' alt='Learn logo' /></a>",
-    githubUrl: 'https://github.com/hasura/gatsby-gitbook-boilerplate',
+    logo: 'http://www.cascadia.edu/_resources/images/logo_website_279x120.gif',
+    logoLink: 'http://www.cascadia.edu/services/emergency/virtual.aspx',
+    title: 'BIT 142',
+    githubUrl: '',
     helpUrl: '',
     tweetText: '',
-    social: `<li>
-		    <a href="https://twitter.com/hasurahq" target="_blank" rel="noopener">
-		      <div class="twitterBtn">
-		        <img src='https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/twitter-brands-block.svg' alt={'Discord'}/>
-		      </div>
-		    </a>
-		  </li>
-			<li>
-		    <a href="https://discordapp.com/invite/hasura" target="_blank" rel="noopener">
-		      <div class="discordBtn">
-		        <img src='https://graphql-engine-cdn.hasura.io/learn-hasura/assets/homepage/discord-brands-block.svg' alt={'Discord'}/>
-		      </div>
-		    </a>
-		  </li>`,
-    links: [{ text: '', link: '' }],
+    social: ``,
+    links: [{ text: "🔗 Mike's Home Page", link: 'http://faculty.cascadia.edu/mpanitz/' }],
     search: {
       enabled: false,
       indexName: '',
@@ -44,11 +31,10 @@ const config = {
     collapsedNav: [
       '/codeblock', // add trailing slash if enabled above
     ],
-    links: [{ text: 'Hasura', link: 'https://hasura.io' }],
+    links: [{ text: " Mike's Home Page", link: 'http://faculty.cascadia.edu/mpanitz/' }],
     frontline: false,
     ignoreIndex: true,
-    title:
-      "<a href='https://hasura.io/learn/'>graphql </a><div class='greenCircle'></div><a href='https://hasura.io/learn/graphql/react/introduction/'>react</a>",
+    title: 'Lesson 01',
   },
   siteMetadata: {
     title: 'Gatsby Gitbook Boilerplate | Hasura',

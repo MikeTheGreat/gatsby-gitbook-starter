@@ -6,23 +6,23 @@ import { css } from '@emotion/core';
 import { Search } from 'styled-icons/fa-solid/Search';
 
 const SearchIcon = styled(Search)`
-  width: 1em;
-  pointer-events: none;
-  margin-right: 10px;
-  position: absolute;
-  left: 15px;
-  color: #2fd2c5;
+    width: 1em;
+    pointer-events: none;
+    margin-right: 10px;
+    position: absolute;
+    left: 15px;
+    color: #2fd2c5;
 `;
 
 const focus = props => css`
-  background: white;
-  color: ${props => props.theme.darkBlue};
-  cursor: text;
-  width: 5em;
-  + ${SearchIcon} {
+    background: white;
     color: ${props => props.theme.darkBlue};
-    margin: 0.3em;
-  }
+    cursor: text;
+    width: 5em;
+    + ${SearchIcon} {
+        color: ${props => props.theme.darkBlue};
+        margin: 0.3em;
+    }
 `;
 
 const collapse = props => css`
@@ -41,17 +41,17 @@ const collapse = props => css`
 `;
 
 const expand = props => css`
-  background: ${props => props.theme.veryLightGray};
-  width: 6em;
-  margin-left: -1.6em;
-  padding-left: 1.6em;
-  + ${SearchIcon} {
-    margin: 0.3em;
-  }
+    background: ${props => props.theme.veryLightGray};
+    width: 6em;
+    margin-left: -1.6em;
+    padding-left: 1.6em;
+    + ${SearchIcon} {
+        margin: 0.3em;
+    }
 `;
 
 const collapseExpand = props => css`
-  ${props => (props.collapse ? collapse() : expand())}
+    ${props => (props.collapse ? collapse() : expand())}
 `;
 
 const Input = styled.input`
@@ -65,30 +65,30 @@ const Input = styled.input`
 `;
 
 const Form = styled.form`
-  display: flex;
-  align-items: center;
-  @media only screen and (max-width: 767px) {
-    width: 100%;
-    margin-left: 15px;
-  }
+    display: flex;
+    align-items: center;
+    @media only screen and (max-width: 767px) {
+        width: 100%;
+        margin-left: 15px;
+    }
 `;
 
 export default connectSearchBox(({ refine, ...rest }) => {
-  const preventSubmit = e => {
-    e.preventDefault();
-  };
+    const preventSubmit = e => {
+        e.preventDefault();
+    };
 
-  return (
-    <Form className={'formElement'} onSubmit={preventSubmit}>
-      <SearchIcon />
-      <Input
-        className={'searchInput '}
-        type="text"
-        placeholder="Search"
-        aria-label="Search"
-        onChange={e => refine(e.target.value)}
-        {...rest}
-      />
-    </Form>
-  );
+    return (
+        <Form className={'formElement'} onSubmit={preventSubmit}>
+            <SearchIcon />
+            <Input
+                className={'searchInput '}
+                type="text"
+                placeholder="Search"
+                aria-label="Search"
+                onChange={e => refine(e.target.value)}
+                {...rest}
+            />
+        </Form>
+    );
 });

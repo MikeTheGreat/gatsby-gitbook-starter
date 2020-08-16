@@ -6,6 +6,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@babel/plugin-proposal-export-default-from": "^7.7.4",
+    "@emotion-icons/fa-regular": "^2.7.1",
     "@emotion/core": "^10.0.22",
     "@emotion/styled": "^10.0.23",
     "@emotion/styled-base": "^10.0.24",
@@ -57,6 +58,7 @@
   "scripts": {
     "start": "gatsby develop",
     "build": "gatsby build --prefix-paths",
+    "clean": "gatsby clean",
     "format": "prettier --write \"src/**/*.{js,jsx,css,json}\"",
     "lint": "eslint --fix \"src/**/*.{js,jsx}\""
   },
