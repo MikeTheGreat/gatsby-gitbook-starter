@@ -4,6 +4,7 @@ import { StaticQuery, graphql } from 'gatsby';
 import styled from '@emotion/styled';
 import { ExternalLink } from 'react-feather';
 import config from '../../../config';
+import { byFrontMatterOrder } from '../../templates/docs';
 
 // eslint-disable-next-line no-unused-vars
 const ListItem = styled(({ className, active, level, ...props }) => {
@@ -101,12 +102,19 @@ const SidebarLayout = ({ location }) => (
                                 slug
                                 title
                             }
+                            frontmatter {
+                                order
+                            }
                         }
                     }
                 }
             }
         `}
         render={({ allMdx }) => {
+            // let newEdges = [...allMdx.edges];
+            // newEdges.sort(byFrontMatterOrder);
+            allMdx.edges.sort(byFrontMatterOrder);
+            debugger;
             return (
                 <Sidebar>
                     {config.sidebar.title ? (

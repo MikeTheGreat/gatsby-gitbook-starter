@@ -13,6 +13,17 @@ import { StaticQuery } from 'gatsby';
 
 const forcedNavOrder = config.sidebar.forcedNavOrder;
 
+export let byFrontMatterOrder = (a, b) => {
+    let a_order =
+        a.node.frontmatter.order != null ? a.node.frontmatter.order : Number.MAX_SAFE_INTEGER;
+
+    let b_order =
+        b.node.frontmatter.order != null ? b.node.frontmatter.order : Number.MAX_SAFE_INTEGER;
+
+    let result = a_order - b_order;
+    return result;
+};
+
 export default class MDXRuntimeTest extends Component {
     render() {
         console.log('Hi');
@@ -53,10 +64,15 @@ export default class MDXRuntimeTest extends Component {
             return result;
         };
 
+        allMdx.edges
+            .sort(byFrontMatterOrder)
+            .map(({ node }) => console.log('After sorting: ' + node.fields.slug));
+
         const navItems = allMdx.edges
+            .sort(byFrontMatterOrder)
             .map(({ node }) => node.fields.slug)
             .filter(slug => slug !== '/') // Include a way to get back to the landing page
-            .sort(compareCaseInsensitive)
+            // .sort(compareCaseInsensitive) // initially tried to sort by slug
             .reduce(
                 (acc, cur) => {
                     if (forcedNavOrder.find(url => url === cur)) {
@@ -201,6 +217,7 @@ export const pageQuery = graphql`
                     }
                     frontmatter {
                         layout
+                        order
                     }
                 }
             }

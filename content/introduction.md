@@ -1,4 +1,5 @@
 ---
+order: 10
 title: 'Introduction'
 metaTitle: 'This is the title tag of this page'
 metaDescription: 'This is the meta description'
@@ -44,8 +45,8 @@ Heading 6 text
 
 ## Lists
 
-- Item 1
-- Item 2
-- Item 3
-- Item 4
-- Item 5
+-   Item 1
+-   Item 2
+-   Item 3
+-   Item 4
+-   Item 5
