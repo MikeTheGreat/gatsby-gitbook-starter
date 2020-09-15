@@ -114,7 +114,7 @@ const SidebarLayout = ({ location }) => (
             // let newEdges = [...allMdx.edges];
             // newEdges.sort(byFrontMatterOrder);
             allMdx.edges.sort(byFrontMatterOrder);
-            debugger;
+
             return (
                 <Sidebar>
                     {config.sidebar.title ? (
