@@ -1,3 +1,5 @@
+// TODO: Pass 'nav' into Layout so that we DRY
+
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
@@ -64,9 +66,9 @@ export default class MDXRuntimeTest extends Component {
             return result;
         };
 
-        allMdx.edges
-            .sort(byFrontMatterOrder)
-            .map(({ node }) => console.log('After sorting: ' + node.fields.slug));
+        // allMdx.edges
+        //     .sort(byFrontMatterOrder)
+        //     .map(({ node }) => console.log('After sorting: ' + node.fields.slug));
 
         const navItems = allMdx.edges
             .sort(byFrontMatterOrder)
@@ -130,7 +132,7 @@ export default class MDXRuntimeTest extends Component {
             case 'none_specified':
             case 'normal':
                 return (
-                    <Layout {...this.props}>
+                    <Layout {...this.props} existingNav={{ allMdx }}>
                         <Helmet>
                             {metaTitle ? <title>{metaTitle}</title> : null}
                             {metaTitle ? <meta name="title" content={metaTitle} /> : null}

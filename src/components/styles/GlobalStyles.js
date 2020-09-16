@@ -223,10 +223,10 @@ export const baseStyles = injectGlobal`
   }
   .headerTitle {
     height: auto;
-    font-size: 16px;
+    font-size: 2em;
     line-height: 1.5;
-    font-weight: 300;
-    color: #fff !important;
+    font-weight: 800;
+    color: #1ed3c6 !important;
     margin-top: 16px;
     text-transform: uppercase;
   }
@@ -369,12 +369,12 @@ export const baseStyles = injectGlobal`
   /* Header section ends here */
   .sidebarTitle {
     /* box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16); */
-    background-color: #f8f8f8;
+    color:#1ed3c6;
+    background-color: #001934;
     padding: 18px 16px;
     font-family: 'Poppins';
     font-size: 18px;
     font-weight: 600;
-    color: #001934;
     display: flex;
     align-items: center;
   }

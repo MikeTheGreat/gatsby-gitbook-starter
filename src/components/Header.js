@@ -103,10 +103,12 @@ const Header = ({ location, isDarkThemeActive, toggleActiveTheme }) => (
                                     alt={'logo'}
                                 />
                             </Link>
-                            <div
-                                className={'headerTitle displayInline'}
-                                dangerouslySetInnerHTML={{ __html: headerTitle }}
-                            />
+                            <Link to="/" className={'navBarBrand'}>
+                                <div
+                                    className={'headerTitle displayInline'}
+                                    dangerouslySetInnerHTML={{ __html: headerTitle }}
+                                />
+                            </Link>
                         </div>
                         {config.header.social ? (
                             <ul
@@ -121,7 +123,7 @@ const Header = ({ location, isDarkThemeActive, toggleActiveTheme }) => (
                         ) : null}
                         <div id="navbar" className={'topnav'}>
                             <div className={'visibleMobile'}>
-                                <Sidebar location={location} />
+                                <Sidebar location={location} propHeader="This is the header" />
                                 <hr />
                             </div>
                             <ul className={'navBarUL navBarNav navBarULRight'}>
