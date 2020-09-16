@@ -130,7 +130,7 @@ export default class MDXRuntimeTest extends Component {
         switch (layout) {
             default:
             case 'none_specified':
-            case 'normal':
+            case 'lesson':
                 return (
                     <Layout {...this.props} existingNav={{ allMdx }}>
                         <Helmet>
@@ -172,11 +172,11 @@ export default class MDXRuntimeTest extends Component {
                         </div>
                     </Layout>
                 );
-            case 'root':
+            case 'course':
                 return (
                     <LayoutMainPage {...this.props}>
                         <h1 style={{ color: 'blue' }}>hi</h1>
-                        <a href="codeblock">Link to Lesson 01</a>
+                        <a href="Lesson_01/index">Link to Lesson 01</a>
                     </LayoutMainPage>
                 );
         }
