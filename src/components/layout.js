@@ -13,6 +13,10 @@ const Wrapper = styled('div')`
     justify-content: space-between;
     background: ${({ theme }) => theme.colors.background};
 
+    .sidebarTitle {
+        color: ${({ theme }) => theme.colors.heading};
+    }
+
     .sideBarUL li a {
         color: ${({ theme }) => theme.colors.text};
     }

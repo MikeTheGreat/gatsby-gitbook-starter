@@ -125,7 +125,6 @@ const SidebarLayout = props => {
         );
     };
 
-    debugger;
     if (existingNav) return fnxRender(existingNav);
     else
         return (

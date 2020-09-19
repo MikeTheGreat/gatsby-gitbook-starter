@@ -256,8 +256,11 @@ export const baseStyles = injectGlobal`
   .removePadd {
     padding: 0 !important;
   }
+ .navBarWrapper {
+   background-color: #001932;
+ }
   .navBarDefault {
-    background-color: #001934;
+    /* background-color: #001935; */
     border-radius: 0;
     border-top: 0;
     margin-bottom: 0;
@@ -369,8 +372,8 @@ export const baseStyles = injectGlobal`
   /* Header section ends here */
   .sidebarTitle {
     /* box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16); */
-    color:#1ed3c6;
-    background-color: #001934;
+    /* color:#1ed3c6; */
+    /* background-color: #001934; */
     padding: 18px 16px;
     font-family: 'Poppins';
     font-size: 18px;
