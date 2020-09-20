@@ -5,13 +5,14 @@ import MDXRenderer from 'gatsby-plugin-mdx/mdx-renderer';
 
 import { Layout, Link } from '$components';
 import LayoutCourse from '../components/layoutCourse';
-import * as path from 'path';
 
 import NextPrevious from '../components/NextPrevious';
 import config from '../../config';
 import { Edit, StyledHeading, StyledMainWrapper } from '../components/styles/Docs';
 
 import { StaticQuery } from 'gatsby';
+
+import { isSubpathOf } from '../utils/misc';
 
 const forcedNavOrder = config.sidebar.forcedNavOrder;
 
@@ -142,8 +143,16 @@ export default class MDXRuntimeTest extends Component {
             default:
             case 'none_specified':
             case 'lesson':
+                const topicPages = {
+                    allMdx: {
+                        edges: allMdx.edges.filter(({ node }) =>
+                            isSubpathOf(mdx.parent.relativePath, node.parent.relativePath)
+                        ),
+                    },
+                };
+
                 return (
-                    <Layout {...this.props} existingNav={{ allMdx }}>
+                    <Layout {...this.props} existingNav={topicPages}>
                         {helmet}
                         <div className={'titleWrapper'}>
                             <StyledHeading>{mdx.fields.title}</StyledHeading>
@@ -167,29 +176,14 @@ export default class MDXRuntimeTest extends Component {
                     </Layout>
                 );
             case 'course':
-                let isSubpathOf = (base, possibleSubpath) => {
-                    let baseParts = path.dirname(base).split(path.sep);
-                    // If base was the root dir then use '/' as the path.
-                    // Otherwise make sure that '/' is the first item in the path
-                    if (baseParts.length === 1 && baseParts[0] === '.') baseParts[0] = '/';
-                    else baseParts.unshift('/');
-
-                    let subParts = path.dirname(possibleSubpath).split(path.sep);
-                    if (subParts.length === 1 && subParts[0] === '.') subParts[0] = '/';
-                    else subParts.unshift('/');
-
-                    if (baseParts.length > subParts.length) return false;
-                    for (let iPart = 0; iPart < baseParts.length; iPart++)
-                        if (baseParts[iPart] !== subParts[iPart]) return false;
-
-                    return true;
-                };
-                let lessonPages = {
-                    edges: allMdx.edges.filter(
-                        ({ node }) =>
-                            node.frontmatter.layout === 'lesson' &&
-                            isSubpathOf(mdx.parent.relativePath, node.parent.relativePath)
-                    ),
+                const lessonPages = {
+                    allMdx: {
+                        edges: allMdx.edges.filter(
+                            ({ node }) =>
+                                node.frontmatter.layout === 'lesson' &&
+                                isSubpathOf(mdx.parent.relativePath, node.parent.relativePath)
+                        ),
+                    },
                 };
                 // .map(({ node }) => {
                 //     return {
@@ -197,9 +191,9 @@ export default class MDXRuntimeTest extends Component {
                 //         slug: node.fields.slug,
                 //     };
                 // });
-                debugger;
+
                 return (
-                    <LayoutCourse {...this.props} existingNav={{ allMdx: lessonPages }}>
+                    <LayoutCourse {...this.props} existingNav={lessonPages}>
                         {helmet}
                         <h1>hi</h1>
                         <a href="Lesson_01/index">Link to Lesson 01</a>
@@ -268,7 +262,7 @@ export const pageQuery = graphql`
     }
 `;
 
-// this actually works with .js pages in the /src/pages folder:
+// this actually works to auto-render the .js pages in the /src/pages folder:
 // export default ({ children }) => (
 //     <div>
 //         <h1>Hi!</h1>

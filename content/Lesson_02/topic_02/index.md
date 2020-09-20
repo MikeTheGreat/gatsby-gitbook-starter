@@ -1,12 +1,12 @@
 ---
-order: 20
-title: 'Lesson 1'
+order: 31
+title: 'Another topic'
 metaTitle: 'Syntax Highlighting is the meta title tag for this page'
 metaDescription: 'This is the meta description for this page'
 ---
 
-The following is a code block with JavaScript language syntax highlighting.
+Sub page for Lesson 2, topic 2
 
-# Lesson 1, topic 1
+# Lesson 02, topic 2 (first subpage)
 
 more details here
