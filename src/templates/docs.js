@@ -4,8 +4,6 @@ import { graphql } from 'gatsby';
 import MDXRenderer from 'gatsby-plugin-mdx/mdx-renderer';
 
 import { Layout, Link } from '$components';
-import LayoutCourse from '../components/layoutCourse';
-import LayoutCourseList from '../components/layoutCourseList';
 
 import NextPrevious from '../components/NextPrevious';
 import config from '../../config';
@@ -194,11 +192,7 @@ export default class MDXRuntimeTest extends Component {
                 // });
 
                 return (
-                    <LayoutCourse
-                        {...this.props}
-                        existingNav={lessonPages}
-                        title={mdx.fields.title}
-                    >
+                    <Layout {...this.props} existingNav={lessonPages} title={mdx.fields.title}>
                         {helmet}
                         <h1>hi</h1>
                         <a href="Lesson_01/index">Link to Lesson 01</a>
@@ -211,7 +205,7 @@ export default class MDXRuntimeTest extends Component {
                                 </li>
                             ))}
                         </ul> */}
-                    </LayoutCourse>
+                    </Layout>
                 );
             case 'courseList':
                 const coursesToList = {
@@ -223,14 +217,10 @@ export default class MDXRuntimeTest extends Component {
                 };
 
                 return (
-                    <LayoutCourseList
-                        {...this.props}
-                        existingNav={coursesToList}
-                        title={mdx.fields.title}
-                    >
+                    <Layout {...this.props} existingNav={coursesToList} title={mdx.fields.title}>
                         {helmet}
                         <h1 style={{ color: '#F00' }}>Course List</h1>
-                    </LayoutCourseList>
+                    </Layout>
                 );
         }
     }
