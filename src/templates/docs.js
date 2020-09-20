@@ -1,12 +1,12 @@
-// TODO: Pass 'nav' into Layout so that we DRY
-
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import { graphql } from 'gatsby';
 import MDXRenderer from 'gatsby-plugin-mdx/mdx-renderer';
 
 import { Layout, Link } from '$components';
-import LayoutMainPage from '../components/layoutMainPage';
+import LayoutCourse from '../components/layoutCourse';
+import * as path from 'path';
+
 import NextPrevious from '../components/NextPrevious';
 import config from '../../config';
 import { Edit, StyledHeading, StyledMainWrapper } from '../components/styles/Docs';
@@ -34,12 +34,6 @@ export default class MDXRuntimeTest extends Component {
         // pages from the src/pages folder don't run the GraphQL query at the bottom of the page
         // so their data is null
         if (!data) {
-            // return (
-            //     <div>
-            //         <h1>Hello /src/pages!</h1>
-            //         {this.props.children}
-            //     </div>
-            // );
             return (
                 <Layout {...this.props}>
                     <div className={'titleWrapper'}>
@@ -127,30 +121,30 @@ export default class MDXRuntimeTest extends Component {
             mdx.frontmatter && mdx.frontmatter.layout ? mdx.frontmatter.layout : 'none_specified';
         console.log('Layout from the file: ' + layout);
 
+        const helmet = (
+            <Helmet>
+                {metaTitle ? <title>{metaTitle}</title> : null}
+                {metaTitle ? <meta name="title" content={metaTitle} /> : null}
+                {metaDescription ? <meta name="description" content={metaDescription} /> : null}
+                {metaTitle ? <meta property="og:title" content={metaTitle} /> : null}
+                {metaDescription ? (
+                    <meta property="og:description" content={metaDescription} />
+                ) : null}
+                {metaTitle ? <meta property="twitter:title" content={metaTitle} /> : null}
+                {metaDescription ? (
+                    <meta property="twitter:description" content={metaDescription} />
+                ) : null}
+                <link rel="canonical" href={canonicalUrl} />
+            </Helmet>
+        );
+
         switch (layout) {
             default:
             case 'none_specified':
             case 'lesson':
                 return (
                     <Layout {...this.props} existingNav={{ allMdx }}>
-                        <Helmet>
-                            {metaTitle ? <title>{metaTitle}</title> : null}
-                            {metaTitle ? <meta name="title" content={metaTitle} /> : null}
-                            {metaDescription ? (
-                                <meta name="description" content={metaDescription} />
-                            ) : null}
-                            {metaTitle ? <meta property="og:title" content={metaTitle} /> : null}
-                            {metaDescription ? (
-                                <meta property="og:description" content={metaDescription} />
-                            ) : null}
-                            {metaTitle ? (
-                                <meta property="twitter:title" content={metaTitle} />
-                            ) : null}
-                            {metaDescription ? (
-                                <meta property="twitter:description" content={metaDescription} />
-                            ) : null}
-                            <link rel="canonical" href={canonicalUrl} />
-                        </Helmet>
+                        {helmet}
                         <div className={'titleWrapper'}>
                             <StyledHeading>{mdx.fields.title}</StyledHeading>
                             {docsLocation !== 'none' && (
@@ -173,11 +167,52 @@ export default class MDXRuntimeTest extends Component {
                     </Layout>
                 );
             case 'course':
+                let isSubpathOf = (base, possibleSubpath) => {
+                    let baseParts = path.dirname(base).split(path.sep);
+                    // If base was the root dir then use '/' as the path.
+                    // Otherwise make sure that '/' is the first item in the path
+                    if (baseParts.length === 1 && baseParts[0] === '.') baseParts[0] = '/';
+                    else baseParts.unshift('/');
+
+                    let subParts = path.dirname(possibleSubpath).split(path.sep);
+                    if (subParts.length === 1 && subParts[0] === '.') subParts[0] = '/';
+                    else subParts.unshift('/');
+
+                    if (baseParts.length > subParts.length) return false;
+                    for (let iPart = 0; iPart < baseParts.length; iPart++)
+                        if (baseParts[iPart] !== subParts[iPart]) return false;
+
+                    return true;
+                };
+                let lessonPages = {
+                    edges: allMdx.edges.filter(
+                        ({ node }) =>
+                            node.frontmatter.layout === 'lesson' &&
+                            isSubpathOf(mdx.parent.relativePath, node.parent.relativePath)
+                    ),
+                };
+                // .map(({ node }) => {
+                //     return {
+                //         title: node.fields.title,
+                //         slug: node.fields.slug,
+                //     };
+                // });
+                debugger;
                 return (
-                    <LayoutMainPage {...this.props}>
-                        <h1 style={{ color: 'blue' }}>hi</h1>
+                    <LayoutCourse {...this.props} existingNav={{ allMdx: lessonPages }}>
+                        {helmet}
+                        <h1>hi</h1>
                         <a href="Lesson_01/index">Link to Lesson 01</a>
-                    </LayoutMainPage>
+                        {/* <ul>
+                            {lessonPages.map(page => (
+                                <li>
+                                    <Link to={page.slug} style={{ color: '#Fff' }}>
+                                        {page.title}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul> */}
+                    </LayoutCourse>
                 );
         }
     }
@@ -220,6 +255,12 @@ export const pageQuery = graphql`
                     frontmatter {
                         layout
                         order
+                    }
+                    parent {
+                        ... on File {
+                            name
+                            relativePath
+                        }
                     }
                 }
             }

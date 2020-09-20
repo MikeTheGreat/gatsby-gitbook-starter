@@ -13,6 +13,10 @@ const Wrapper = styled('div')`
     justify-content: space-between;
     background: ${({ theme }) => theme.colors.background};
 
+    .sidebarTitle {
+        color: ${({ theme }) => theme.colors.heading};
+    }
+
     .sideBarUL li a {
         color: ${({ theme }) => theme.colors.text};
     }
@@ -62,11 +66,32 @@ const RightSideBarWidth = styled('div')`
     width: 224px;
 `;
 
-const LayoutMainPage = ({ children, location }) => (
+const Layout = ({ children, location, existingNav }) => (
     <ThemeProvider location={location}>
-        <h1 style={{ color: 'red' }}>LayoutMainPage</h1>
-        {children}
+        <MDXProvider components={mdxComponents}>
+            <Wrapper>
+                <LeftSideBarWidth className={'hiddenMobile'}>
+                    <Sidebar
+                        location={location}
+                        existingNav={existingNav}
+                        propLayout="this is from layout.js"
+                    />
+                </LeftSideBarWidth>
+                {config.sidebar.title ? (
+                    <div
+                        className={'sidebarTitle sideBarShow'}
+                        dangerouslySetInnerHTML={{ __html: config.sidebar.title }}
+                    />
+                ) : null}
+                <Content>
+                    <MaxWidth>{children}</MaxWidth>
+                </Content>
+                <RightSideBarWidth className={'hiddenMobile'}>
+                    <RightSidebar location={location} propRightSide="This is the right sidebar" />
+                </RightSideBarWidth>
+            </Wrapper>
+        </MDXProvider>
     </ThemeProvider>
 );
 
-export default LayoutMainPage;
+export default Layout;
