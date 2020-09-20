@@ -383,7 +383,7 @@ export const baseStyles = injectGlobal`
   }
 
   .sideBarShow {
-    display: none;
+    /*display: none;*/
   }
 
   .sidebarTitle a {

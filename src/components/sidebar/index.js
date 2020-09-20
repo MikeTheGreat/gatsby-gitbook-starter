@@ -94,6 +94,7 @@ const Divider = styled(props => (
 const SidebarLayout = props => {
     let location = props.location;
     let existingNav = props.existingNav;
+    let title = props.title;
     let fnxRender = ({ allMdx }) => {
         // let newEdges = [...allMdx.edges];
         // newEdges.sort(byFrontMatterOrder);
@@ -101,10 +102,10 @@ const SidebarLayout = props => {
 
         return (
             <Sidebar propSidebarLayout="This is the sidebar\index.js">
-                {config.sidebar.title ? (
+                {title ? (
                     <div
                         className={'sidebarTitle hiddenMobile'}
-                        dangerouslySetInnerHTML={{ __html: config.sidebar.title }}
+                        dangerouslySetInnerHTML={{ __html: title }}
                     />
                 ) : null}
                 <ul className={'sideBarUL'}>

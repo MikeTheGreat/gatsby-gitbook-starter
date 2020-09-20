@@ -66,23 +66,23 @@ const RightSideBarWidth = styled('div')`
     width: 224px;
 `;
 
-const Layout = ({ children, location, existingNav }) => (
+const Layout = ({ children, location, existingNav, title }) => (
     <ThemeProvider location={location}>
         <MDXProvider components={mdxComponents}>
             <Wrapper>
                 <LeftSideBarWidth className={'hiddenMobile'}>
+                    {title ? (
+                        <div
+                            className={'sidebarTitle sideBarShow'}
+                            dangerouslySetInnerHTML={{ __html: title }}
+                        />
+                    ) : null}
                     <Sidebar
                         location={location}
                         existingNav={existingNav}
                         propLayout="this is from layout.js"
                     />
                 </LeftSideBarWidth>
-                {config.sidebar.title ? (
-                    <div
-                        className={'sidebarTitle sideBarShow'}
-                        dangerouslySetInnerHTML={{ __html: config.sidebar.title }}
-                    />
-                ) : null}
                 <Content>
                     <MaxWidth>{children}</MaxWidth>
                 </Content>

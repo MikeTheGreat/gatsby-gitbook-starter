@@ -83,6 +83,7 @@ const Layout = ({ children, location, existingNav, title }) => (
                         propLayout="this is from layout.js"
                     />
                 </LeftSideBarWidth>
+
                 <Content>
                     <MaxWidth>{children}</MaxWidth>
                 </Content>
